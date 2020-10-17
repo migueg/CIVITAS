@@ -64,26 +64,30 @@ public class TituloPropiedad {
     }
     
     private float getPrecioVenta(){
-        throw new UnsupportedOperationException("No implementado");
+        return this.precioCompra + this.precioEdificar * this.cantidadCasasHoteles() * this.factorRevalorizacion;
     }
     
     private Boolean  propietarioEncarcelado(){
-        throw new UnsupportedOperationException("No implementado");
+       if(this.propietario.encarcelado || ! this.propietario.equals(null)){
+           return true;
+       }else{
+           return false;
+       }
     }
     
     public Boolean getHipotecado(){
-        throw new UnsupportedOperationException("No implementado");
+       return this.hipotecado;
     }
     
     void actualizaPropietarioPorConversion( Jugador jugador){
-
+        this.propietario = jugador;
     }
     Boolean cancelarHipoteca( Jugador jugador) {
         throw new UnsupportedOperationException("No implementado");
     }
 
     int cantidadCasasHoteles(){
-       throw new UnsupportedOperationException("No implementado"); 
+       return this.numCasas +this.numHoteles;
     }
     Boolean comprar( Jugador jugador){
         throw new UnsupportedOperationException("No implementado");
@@ -95,51 +99,76 @@ public class TituloPropiedad {
         throw new UnsupportedOperationException("No implementado");
     }
     Boolean derruirCasas(int n,  Jugador jugador){
-        throw new UnsupportedOperationException("No implementado");
+        if(this.propietario.equals(jugador) && this.numCasas >= n){
+            this.numCasas -= n;
+            return true;
+        }else{
+            return false;
+        }
     }
     Boolean esEsteElPropietario(Jugador jugador) {
-        throw new UnsupportedOperationException("No implementado");
+        if(this.propietario.equals(jugador)){
+            return true;
+        }else
+            return false;
     }
    
     float getImporteCancelarHipoteca(){
-        throw new UnsupportedOperationException("No implementado");
+        
+        float cantidadRecibida= (float)(this.hipotecaBsase*(1+(numCasas*0.5)+(numHoteles*2.5)));
+
+        return cantidadRecibida * factorInteresesHipoteca;
     }
 
     String getNombre(){
-        throw new UnsupportedOperationException("No implementado");
+       return this.nombre;
     }
     int getNumCasas(){
-        throw new UnsupportedOperationException("No implementado");
+       return this.numCasas;
     }
     int getNumHoteles(){
-       throw new UnsupportedOperationException("No implementado"); 
+       return this.numHoteles;
     }
   
     float getPrecioCompra(){
-       throw new UnsupportedOperationException("No implementado"); 
+       return this.precioCompra;
     }
     float getPrecioEdificar() {
-        throw new UnsupportedOperationException("No implementado");
+       return this.precioEdificar;
     }
   
     Jugador getPropietario() {
-        throw new UnsupportedOperationException("No implementado");
+       return this.propietario;
     }
     Boolean hipotecar( Jugador jugador ){
         throw new UnsupportedOperationException("No implementado");
     }
   
     Boolean tienePropietario(){
-        throw new UnsupportedOperationException("No implementado");
+       return !this.propietario.equals(null);
     }
 
 
     void tramitarAlquiler(Jugador jugador ) {
-        throw new UnsupportedOperationException("No implementado");
+        if(!this.propietario.equals(null) && !this.propietario.equals(jugador)){
+            if(jugador.pagaAlquiler(this.getPrecioAlquiler())){
+                this.propietario.recibe(this.getPrecioAlquiler());
+            }
+            
+        }
     }
 
     Boolean vender(Jugador jugador){
-        throw new UnsupportedOperationException("No implementado");
+       if(this.propietario.equals(jugador) && this.hipotecado == false ){
+           this.propietario.recibe(this.getPrecioVenta());
+           this.propietario.cancelarPropiedad(this);
+           this.propietario = null;
+           this.numCasas = 0;
+           this.numHoteles = 0;
+           return true;
+       }else{
+           return false;
+       }
 
     }
 

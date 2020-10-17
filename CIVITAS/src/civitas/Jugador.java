@@ -31,5 +31,47 @@ public class Jugador {
         return "Jugador{" + "encarcelado=" + encarcelado + ", nombre=" + nombre + ", numCasillaActual=" + numCasillaActual + ", puedeComprar=" + puedeComprar + ", saldo=" + saldo + ", propiedades=" + propiedades + '}';
     }
     
+    Boolean pagaAlquiler(float cantidad){
+        throw new UnsupportedOperationException("No implementado");
+
+    }
     
+    void cancelarPropiedad (TituloPropiedad p){
+        this.propiedades.remove(p);
+    }
+    Boolean recibe(float cantidad){
+        throw new UnsupportedOperationException("No implementado");
+
+    }
+    
+    protected String getNombre(){
+        return this.nombre;
+    }
+    
+    Boolean encarcelar(int numCasillaCarcel){
+        throw new UnsupportedOperationException("No implementado");
+    }
+    
+    int getNumCasillaActual(){
+        return this.numCasillaActual;
+    }
+    
+    Boolean moverACasilla (int numCasilla){
+        throw new UnsupportedOperationException("No implementado");
+    }
+    
+    Boolean modificarSaldo (float cantidad){
+         throw new UnsupportedOperationException("No implementado");
+    }
+    int cantidadCasasHoteles(){
+        throw new UnsupportedOperationException("No implementado");
+    }
+    
+    Boolean tieneSalvoconducto (){
+        throw new UnsupportedOperationException("No implementado");
+    }
+    
+    Boolean obtenerSalvoconducto(Sorpresa sorpresa){
+         throw new UnsupportedOperationException("No implementado");
+    }
 }

@@ -5,6 +5,7 @@
  */
 package civitas;
 
+import java.util.ArrayList;
 /**
  *
  * @author Usuario
@@ -19,4 +20,8 @@ public class Casilla {
      String getNombre(){
          return this.nombre;
      }
+     
+    Boolean recibeJugador(int iactual,ArrayList<Jugador> todos ){
+        return false;
+    }
 }
