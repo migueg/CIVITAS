@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author Usuario
  */
-public class Jugador {
+public class Jugador implements Comparable <Jugador> {
     protected static int CasasMax =4;
     protected static int CasasPorHotel = 4;
     protected Boolean encarcelado;
@@ -25,14 +25,80 @@ public class Jugador {
     private static float SaldoInicial = 7500;
     
     private ArrayList<TituloPropiedad> propiedades;
-
-    @Override
-    public String toString() {
-        return "Jugador{" + "encarcelado=" + encarcelado + ", nombre=" + nombre + ", numCasillaActual=" + numCasillaActual + ", puedeComprar=" + puedeComprar + ", saldo=" + saldo + ", propiedades=" + propiedades + '}';
+    private Sorpresa salvoconducto;
+    
+ 
+    Jugador(String nombre){
+        this.nombre = nombre;
+        this.encarcelado = false;
+        this.numCasillaActual = 0;
+        this.puedeComprar = false;
+        this.saldo = SaldoInicial;
+        this.propiedades = new ArrayList();
+        this.salvoconducto = null;
     }
     
+    protected Jugador(Jugador otro){
+        this.nombre = otro.getNombre();
+        this.encarcelado = otro.encarcelado;
+        this.numCasillaActual = otro.getNumCasillaActual();
+        this.propiedades = otro.getPropiedades();
+        this.puedeComprar = otro.getPuedeComprar();
+        this.saldo = otro.getSaldo();
+        this.salvoconducto = otro.getSalvoconducto();
+        
+        
+    }
+    
+    public int compareTo(Jugador otro){
+       
+       return Float.compare(this.saldo,  otro.getSaldo());
+    }
+    
+    protected Boolean debeSerEncarcelado(){
+        if(this.encarcelado)
+            return false;
+        else{
+            if(!this.tieneSalvoconducto())
+                return true;
+            else{
+                this.perderSalvoconducto();
+                Diario.getInstance().ocurreEvento("El jugador "+ this.nombre + " se libra de la carcel");
+                return false;
+            }
+        }
+    }
+    
+    private void perderSalvoconducto(){
+        this.salvoconducto.usada();
+        this.salvoconducto = null;
+    }
+    
+    private Boolean puedoGastar(float precio){
+        if(this.encarcelado){
+            return false;
+        }else{
+            return this.saldo >= precio;
+        }
+    }
+    
+    private  Boolean existeLaPropiedad(int ip){
+        return this.propiedades.get(ip ) != null;
+    }
+    
+    private Boolean puedeSalirCarcelPagando(){
+       return this.saldo >= PrecioLibertad; 
+    }
+    
+    Boolean paga(float cantidad){
+       return this.modificarSaldo(cantidad * -1);
+    }
     Boolean pagaAlquiler(float cantidad){
-        throw new UnsupportedOperationException("No implementado");
+        if(this.encarcelado)
+            return false;
+        else{
+            return this.paga(cantidad);
+        }
 
     }
     
@@ -40,38 +106,217 @@ public class Jugador {
         this.propiedades.remove(p);
     }
     Boolean recibe(float cantidad){
-        throw new UnsupportedOperationException("No implementado");
+        if(this.encarcelado)
+            return false;
+        else{
+            return this.modificarSaldo(cantidad);
+        }
 
     }
+    
+    
     
     protected String getNombre(){
         return this.nombre;
     }
     
     Boolean encarcelar(int numCasillaCarcel){
-        throw new UnsupportedOperationException("No implementado");
+        if(this.debeSerEncarcelado()){
+      
+            this.moverACasilla(numCasillaCarcel);
+            this.encarcelado = true;
+            Diario.getInstance().ocurreEvento("El jugador "+ this.nombre + " ha sido encarcelado");
+        }
+        
+        return this.encarcelado;
     }
-    
+        
+    Boolean moverACasilla (int numCasilla){
+        if(this.encarcelado)
+            return false;
+        else{
+            this.numCasillaActual = numCasilla;
+            this.puedeComprar = false;
+            Diario.getInstance().ocurreEvento("El jugador "+ this.nombre + " ha movido a la casilla "+ numCasilla);
+            return true;
+        }
+    }
     int getNumCasillaActual(){
         return this.numCasillaActual;
     }
     
-    Boolean moverACasilla (int numCasilla){
-        throw new UnsupportedOperationException("No implementado");
-    }
+   
     
     Boolean modificarSaldo (float cantidad){
-         throw new UnsupportedOperationException("No implementado");
+        this.saldo += cantidad;
+        Diario.getInstance().ocurreEvento("Se ha modificado el saldo en " + cantidad + " unidades al jugador "+ this.nombre);
+        return true;
     }
     int cantidadCasasHoteles(){
-        throw new UnsupportedOperationException("No implementado");
+        int suma = 0;
+        for(TituloPropiedad t : this.propiedades){
+            suma += t.cantidadCasasHoteles();
+        }
+        
+        return suma;
     }
     
     Boolean tieneSalvoconducto (){
-        throw new UnsupportedOperationException("No implementado");
+        if(this.salvoconducto == null)
+            return false;
+        else 
+            return true;
     }
     
     Boolean obtenerSalvoconducto(Sorpresa sorpresa){
+        if(this.encarcelado){
+            return false;
+        }else{
+            this.salvoconducto = sorpresa;
+            return true;
+        }
+    }
+    
+    Boolean puedeComprarCasilla(){
+        if(this.encarcelado){
+            this.puedeComprar = false;
+        }else{
+            this.puedeComprar = true;
+        }
+        
+        return this.puedeComprar;
+    }
+    Boolean pagaImpuesto(float cantidad){
+        if(this.encarcelado)
+            return false;
+        else{
+            return this.paga(cantidad);
+        }
+    }
+
+    Boolean tieneAlgoQueGestionar(){
+        return this.propiedades.size()>0;
+    }
+    
+    Boolean salirCarcelPagando (){
+        if(this.encarcelado && this.puedeSalirCarcelPagando()){
+            this.paga(PrecioLibertad);
+            this.encarcelado = false;
+            Diario.getInstance().ocurreEvento("El jugador " +this.nombre + " sale de la cárcel porque ha pagado");
+            return true;
+        }else
+            return false;
+    }
+    Boolean salirCarcelTirando (){
+        Boolean salgo = Dado.getInstance().salgoDeLaCarcel();
+        if(salgo){
+            this.encarcelado = false;
+            Diario.getInstance().ocurreEvento("El jugador " +this.nombre + " sale de la cárcel porque le ha salido en el dado");
+        }
+            
+        return salgo;
+      
+    }
+    Boolean pasaPorSalida(){
+        this.modificarSaldo(PasoPorSalida);
+        Diario.getInstance().ocurreEvento("El jugador "+ this.nombre + " ha pasado por la casilla de salida");
+        return true;
+    }
+    Boolean cancelarHipoteca(int ip){
+        throw new UnsupportedOperationException("No implementado");
+    }
+    Boolean comprar(TituloPropiedad titulo){
+        throw new UnsupportedOperationException("No implementado");
+    }
+    
+    Boolean construirCasa(int ip){
          throw new UnsupportedOperationException("No implementado");
     }
+    Boolean construirHotel(int ip){
+         throw new UnsupportedOperationException("No implementado");
+    }
+    
+    Boolean enBancarrota(){
+        return !this.puedoGastar();
+    }
+
+  
+    
+    Boolean hipotecar(int ip){
+        throw new UnsupportedOperationException("No implementado");
+    }
+    
+    private Boolean puedoEdificarCasa(TituloPropiedad titulo){
+        return  titulo.getNumCasas() < CasasMax;
+    }
+    
+    private Boolean puedoEdificarHotel(TituloPropiedad titulo){
+        return  titulo.getNumCasas() == CasasMax && titulo.getNumHoteles() < HotelesMax;
+    }
+    private Boolean puedoGastar(){
+        return this.saldo > 0;
+    }
+    
+ 
+    Boolean vender(int ip){
+       if(this.encarcelado)
+           return false;
+       else{
+           if(this.existeLaPropiedad(ip)){
+              if(this.propiedades.get(ip).vender(this)){
+                  this.propiedades.remove(ip);
+                  Diario.getInstance().ocurreEvento("Se ha eliminado la propiedad "+ ip + " del jugador "+ this.nombre );
+                  return true;
+              }else
+                  return false;
+                
+           }else
+               return false;
+       }
+    }
+
+    Boolean getPuedeComprar() {
+        return puedeComprar;
+    }
+
+    protected float getSaldo() {
+        return saldo;
+    }
+
+   protected ArrayList<TituloPropiedad> getPropiedades() {
+        return propiedades;
+    }
+    
+    int getCasasMax(){
+        return CasasMax;
+    }
+    
+    int getCasasPorHotel(){
+        return CasasPorHotel;
+    }
+    
+    int getHotelesMax(){
+        return HotelesMax;
+    }
+    
+    Sorpresa getSalvoconducto(){
+        return this.salvoconducto;
+    }
+    
+    float getPremioPasoSalida() {
+        return PasoPorSalida;
+    }
+
+   float getPrecioLibertad() {
+        return PrecioLibertad;
+    }
+   public Boolean isEncarcelado (){
+       return this.encarcelado;
+   }
+   
+      @Override
+    public String toString() {
+        return "Jugador{" + "encarcelado=" + encarcelado + ", nombre=" + nombre + ", numCasillaActual=" + numCasillaActual + ", puedeComprar=" + puedeComprar + ", saldo=" + saldo + ", propiedades=" + propiedades + '}';
+    }
+    
 }
