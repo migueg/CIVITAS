@@ -20,7 +20,10 @@ public class Casilla {
     private MazoSorpresas mazo;
     
      Casilla (String nombre){
+        this.init();
         this.nombre = nombre;
+        
+        this.tipo = TipoCasilla.DESCANSO;
     }
     
     Casilla (TituloPropiedad titulo){
@@ -48,6 +51,7 @@ public class Casilla {
     Casilla(MazoSorpresas mazo, String nombre){
         this.init();
         this.mazo = mazo;
+       
         this.nombre = nombre;
         this.tipo = TipoCasilla.SORPRESA;
         
