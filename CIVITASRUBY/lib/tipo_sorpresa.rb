@@ -3,7 +3,7 @@
 # and open the template in the editor.
 
 #encoding: utf-8
-module CIVITAS
+module Civitas
   module Tipo_sorpresa
     PAGARCOBRAR = :Pagar_cobrar
     IRACASILLA = :Ir_a_casilla

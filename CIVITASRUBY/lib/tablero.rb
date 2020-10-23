@@ -90,21 +90,25 @@ module Civitas
     end
     
     private
-    def correcto
-      if (@casillas.length() > @num_casilla_carcel) and @tiene_juez
+    def correcto(*args)
+      if args.length() == 0
+        if (@casillas.length() > @num_casilla_carcel) and @tiene_juez
         return true
       else
         return false
       end
+      else
+        
+      if correcto() and (args[0] > 1)
+        return true
+      else
+        return false
+      end
+      end
+      
     end
     
-    def correcto(num_casilla)
-      if correcto() and (num_casilla > 1)
-        return true
-      else
-        return false
-      end
-    end
+
     
     
   end
