@@ -66,7 +66,7 @@ public class CivitasJuego {
         this.tablero.añadeCasilla(new Casilla (new TituloPropiedad("Calle San Matias", 900,(float)2,1500,1500,2000)));
         this.tablero.añadeCasilla(new Casilla(mazo,"Sorpresa3"));
         this.tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle Recogidas", 1200,(float)2.5,2000,2000,2500)));
-        this.tablero.añadeCasilla(new Casilla(500,"Impuesto"));
+        this.tablero.añadeCasilla(new Casilla((float)500,"Impuesto"));
         this.tablero.añadeCasilla(new Casilla(new TituloPropiedad("Paseo de Los Tristes", 1500,(float)3,2500,2500,3000) ));
         this.tablero.añadeCasilla(new Casilla (new TituloPropiedad("Plaza Birrambla", 2500,(float)3,4000,4000,5000)));
         this.tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle Angel Ganivet", 3000,(float)4,5000,5000,6000) ));

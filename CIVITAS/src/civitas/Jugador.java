@@ -237,7 +237,7 @@ public class Jugador implements Comparable <Jugador> {
     }
     
     Boolean enBancarrota(){
-        return !this.puedoGastar();
+        return this.saldo <= 0;
     }
 
   
@@ -253,10 +253,7 @@ public class Jugador implements Comparable <Jugador> {
     private Boolean puedoEdificarHotel(TituloPropiedad titulo){
         return  titulo.getNumCasas() == CasasMax && titulo.getNumHoteles() < HotelesMax;
     }
-    private Boolean puedoGastar(){
-        return this.saldo > 0;
-    }
-    
+ 
  
     Boolean vender(int ip){
        if(this.encarcelado)

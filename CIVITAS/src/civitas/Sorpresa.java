@@ -152,6 +152,8 @@ void aplicarAJugador(int actual  ,ArrayList<Jugador> todos){
         case SALIRCARCEL:
             this.aplicarAJugador_salirCarcel(actual, todos);
             break;
+        default:
+            break;
     }
  }
 void salirDelMazo() {
