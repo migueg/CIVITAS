@@ -41,13 +41,20 @@ public class TituloPropiedad {
 
     @Override
     public String toString() {
-        return "TituloPropiedad{" + "alquilerBase=" + alquilerBase + ", factorRevalorizacion=" + factorRevalorizacion + ", hipotecaBsase=" + 
-                    hipotecaBsase + ", hipotecado=" + hipotecado + ", nombre=" + nombre + ", numCasas=" + numCasas + ", numHoteles=" + numHoteles 
-                    + ", precioCompra=" + precioCompra + ", precioEdificar=" + precioEdificar + ", propietario=" + propietario.toString() + '}';
+        String result = "TituloPropiedad{" + "\nnombre=" + nombre + "\nalquilerBase=" + alquilerBase + ", \nfactorRevalorizacion=" + factorRevalorizacion + ", hipotecaBsase=" + 
+                    hipotecaBsase + ", \nhipotecado=" + hipotecado + ", \numCasas=" + numCasas + ", \numHoteles=" + numHoteles 
+                    + ", \nprecioCompra=" + precioCompra + ", \nprecioEdificar=" + precioEdificar ;
+        
+        
+        
+        result += " \n}\n";
+        
+        return result;
+        
     }
 
     private float getImporteHipoteca() {
-        throw new UnsupportedOperationException("No implementado");
+        return (float)(this.hipotecaBsase* (1+(this.numCasas*0.5)+(this.numHoteles*2.5)));
     }
     
     private float getPrecioAlquiler(){
@@ -68,7 +75,7 @@ public class TituloPropiedad {
     }
     
     private Boolean  propietarioEncarcelado(){
-       if(this.propietario.encarcelado || ! this.propietario.equals(null)){
+       if(this.propietario.encarcelado || this.propietario == null){
            return true;
        }else{
            return false;
@@ -83,20 +90,53 @@ public class TituloPropiedad {
         this.propietario = jugador;
     }
     Boolean cancelarHipoteca( Jugador jugador) {
-        throw new UnsupportedOperationException("No implementado");
+       Boolean result = false;
+       if(this.hipotecado){
+           if(this.esEsteElPropietario(jugador)){
+               this.propietario.paga(this.getImporteCancelarHipoteca());
+               this.hipotecado = false;
+               result = true;
+                      
+           }
+       }
+       
+       return result;
     }
 
     int cantidadCasasHoteles(){
        return this.numCasas +this.numHoteles;
     }
     Boolean comprar( Jugador jugador){
-        throw new UnsupportedOperationException("No implementado");
+        Boolean result = false;
+        
+        if(!this.tienePropietario()){
+            this.propietario = jugador;
+            result = true;
+            this.propietario.paga(this.precioCompra);
+        }
+        return result;
     }
     Boolean construirCasa( Jugador jugador){
-        throw new UnsupportedOperationException("No implementado");
+       Boolean result = false;
+        
+        if(this.esEsteElPropietario(jugador)){
+           this.propietario.paga(this.precioEdificar);
+           this.numCasas++;
+           result = true;
+        }
+        
+        return result;
     }
     Boolean construirHotel(Jugador jugador){
-        throw new UnsupportedOperationException("No implementado");
+        Boolean result = false;
+        
+        if(this.esEsteElPropietario(jugador)){
+           this.propietario.paga(this.precioEdificar);
+           this.numHoteles++;
+           result = true;
+        }
+        
+        return result;
     }
     Boolean derruirCasas(int n,  Jugador jugador){
         if(this.propietario.equals(jugador) && this.numCasas >= n){
@@ -107,7 +147,7 @@ public class TituloPropiedad {
         }
     }
     Boolean esEsteElPropietario(Jugador jugador) {
-        if(this.propietario.equals(jugador)){
+        if(this.propietario == jugador){
             return true;
         }else
             return false;
@@ -141,19 +181,28 @@ public class TituloPropiedad {
        return this.propietario;
     }
     Boolean hipotecar( Jugador jugador ){
-        throw new UnsupportedOperationException("No implementado");
+       Boolean salida = false;
+       
+       if( ! hipotecado && this.esEsteElPropietario(jugador)){
+          
+           this.propietario.recibe(this.getImporteHipoteca());
+           this.hipotecado = true;
+           salida = true;
+       }
+       
+       return salida;
     }
   
     Boolean tienePropietario(){
-       return !this.propietario.equals(null);
+       return this.propietario != null;
     }
 
 
     void tramitarAlquiler(Jugador jugador ) {
-        if(!this.propietario.equals(null) && !this.propietario.equals(jugador)){
-            if(jugador.pagaAlquiler(this.getPrecioAlquiler())){
-                this.propietario.recibe(this.getPrecioAlquiler());
-            }
+        if(this.tienePropietario() && !this.esEsteElPropietario(jugador)){
+           float precio = this.getPrecioAlquiler();
+           jugador.pagaAlquiler(precio);
+           this.propietario.recibe(precio);
             
         }
     }

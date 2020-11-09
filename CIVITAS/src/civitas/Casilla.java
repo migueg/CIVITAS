@@ -17,7 +17,7 @@ public class Casilla {
     private TipoCasilla tipo;
     private TituloPropiedad tituloPropiedad;
     private TipoSorpresa sorpresa;
-    private MazoSorpresas mazo;
+    private static MazoSorpresas mazo;
     
      Casilla (String nombre){
         this.init();
@@ -58,6 +58,17 @@ public class Casilla {
     }
     
     private void recibeJugador_calle(int iactual , ArrayList<Jugador> todos){
+        if(this.jugadorCorrecto(iactual, todos)){
+            this.informe(iactual, todos);
+            Jugador jugador = todos.get(iactual);
+            
+            if(!this.tituloPropiedad.tienePropietario()){
+                jugador.puedeComprarCasilla();
+                
+            }else{
+                this.tituloPropiedad.tramitarAlquiler(jugador);
+            }
+        }
 
     }
     private void recibeJugador_impuesto(int iactual , ArrayList<Jugador> todos){
@@ -73,7 +84,12 @@ public class Casilla {
         }
     }
     private void recibeJugador_sorpresa(int iactual , ArrayList<Jugador> todos){
-        
+        if(this.jugadorCorrecto(iactual, todos)){
+           Sorpresa sorpresa = this.mazo.siguiente();
+           this.informe(iactual, todos);
+           sorpresa.aplicarAJugador(iactual, todos);
+        }
+            
     }
     
     private void informe(int iactual , ArrayList<Jugador> todos ){
@@ -108,13 +124,46 @@ public class Casilla {
             return false;
     }
     void recibeJugador(int iactual , ArrayList<Jugador> todos){
+        switch(this.tipo){
+            case CALLE:
+                this.recibeJugador_calle(iactual, todos);
+                break;
+            case IMPUESTO:
+                this.recibeJugador_impuesto(iactual, todos);
+                break;
+            case JUEZ:
+                this.recibeJugador_juez(iactual, todos);
+                break;
+            case SORPRESA:
+                this.recibeJugador_sorpresa(iactual, todos);
+                break;
+            default:
+                this.informe(iactual, todos);
+                break;
+            
+        }
 
     }
  
+    public void updateMazo(MazoSorpresas mazo){
+        if(!(this.mazo != null))
+            this.mazo = mazo;
+    }
 
     @Override
     public String toString() {
-        return "Casilla{" + "nombre=" + nombre + ", importe=" + importe + ", tipo=" + tipo + ", tituloPropiedad=" + tituloPropiedad + ", sorpresa=" + sorpresa + ", mazo=" + mazo + '}';
+        String result = "Casilla{\n" + "nombre=" + nombre + ", \ntipo=" + tipo ;
+        if(this.importe != -1.0){
+            result += "\nImporte = "+ this.importe;
+        }
+        if(this.sorpresa != null){
+            result += this.sorpresa.toString();
+        }
+        if(this.tituloPropiedad != null)
+            result += this.tituloPropiedad.toString();
+        
+        result += "\n}";
+        return result;
     }
 
 }

@@ -42,7 +42,7 @@ public class Tablero {
     }
     
     private Boolean correcto( int numCasilla){
-        if(correcto() && (numCasilla > VALIDA)){
+        if(correcto() && (numCasilla >= VALIDA) || (numCasilla == 0) ){
             return true;
         }else{
             return false;
@@ -117,6 +117,12 @@ public class Tablero {
             return diferencia+this.casillas.size();
         }else{
             return diferencia;
+        }
+    }
+    
+    public void updateMazo(MazoSorpresas mazo){
+        for(Casilla c : this.casillas){
+            c.updateMazo(mazo);
         }
     }
 }

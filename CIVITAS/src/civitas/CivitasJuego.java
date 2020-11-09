@@ -19,10 +19,10 @@ public class CivitasJuego {
     private Tablero tablero;
     private MazoSorpresas mazo;
     
-    CivitasJuego (ArrayList<String> nombres){
+    public CivitasJuego (ArrayList<String> nombres){
         this.jugadores = new ArrayList();
         nombres.forEach((nombre) -> {
-            System.out.println(nombre);
+            
             jugadores.add(new Jugador(nombre));
         });
         
@@ -48,17 +48,17 @@ public class CivitasJuego {
         this.mazo.alMazo(new Sorpresa(TipoSorpresa.PORJUGADOR,tablero,100,"Recibe por jugador"));
         this.mazo.alMazo(new Sorpresa(TipoSorpresa.PORJUGADOR,tablero,-100,"Paga por jugador"));
         this.mazo.alMazo(new Sorpresa(TipoSorpresa.SALIRCARCEL,tablero));
+        this.tablero.updateMazo(mazo);
     }
     private void inicializarTablero(MazoSorpresas mazo){
         this.tablero = new Tablero(10);
-        this.tablero.añadeCasilla(new Casilla("Salida" ));
         this.tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle Pedro Antonio Alarcón", 100,(float)0.40,150,150,300) ));
         this.tablero.añadeCasilla(new Casilla (new TituloPropiedad("Calle Recogidas", 150,(float)0.35,200,200,400)));
         this.tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle Pavaneras", 200,(float)0.25,250,250,500) ));
         this.tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle Mesones", 300,(float)0.20,400,400,600) ));
         this.tablero.añadeCasilla(new Casilla(mazo,"Sorpresa1"));
         this.tablero.añadeCasilla(new Casilla (new TituloPropiedad("Plaza de la Trinidad", 400,(float)0.1,500,500,650)));
-        this.tablero.añadeCasilla(new Casilla(10,"Juez"));
+        this.tablero.añadeJuez();
         this.tablero.añadeCasilla(new Casilla("Descanso"));
         this.tablero.añadeCasilla(new Casilla(new TituloPropiedad("Camino de Ronda", 500,(float)1,600,600,750) ));
         this.tablero.añadeCasilla(new Casilla(mazo,"Sorpresa2"));
@@ -88,15 +88,64 @@ public class CivitasJuego {
         return jugadores;
     }
     
+    public ArrayList<String>ranking_UI(){
+        ArrayList<Jugador> jugadores = this.ranking();
+        ArrayList<String> result = new ArrayList();
+        int suma = 1;
+        for(Jugador j : jugadores){
+            String s = suma + " : " + j.getNombre();
+            result.add(s);
+            suma++;
+        }
+        
+        return result;
+    }
+    
     private void avanzaJugador(){
+        Jugador jugadorActual = this.jugadores.get(indiceJugadorActual);
+        int posicionActual = jugadorActual.getNumCasillaActual();
+        int tirada = Dado.getInstance().tirar();
+        
+        int posicionNueva = this.tablero.nuevaPosicion(posicionActual, tirada);
+        Casilla casilla = this.tablero.getCasilla(posicionNueva);
+        this.contabilizarPasosPorSalida(jugadorActual);
+        System.out.println(posicionNueva);
+        jugadorActual.moverACasilla(posicionNueva);
+        casilla.recibeJugador(this.indiceJugadorActual, jugadores);
+        this.contabilizarPasosPorSalida(jugadorActual);
         
     }
     
     public Boolean comprar(){
-        return false;
+        Boolean res = false;
+        
+        Jugador jugadorActual = this.jugadores.get(indiceJugadorActual);
+        int numCasillaActual = jugadorActual.getNumCasillaActual();
+        Casilla casilla = this.tablero.getCasilla(numCasillaActual);
+        TituloPropiedad titulo = casilla.getTituloPropiedad();
+        res = jugadorActual.comprar(titulo);
+        
+
+
+        return res;
     }
     public OperacionesJuego siguientePaso(){
-        return null;
+        Jugador jugadorActual = this.jugadores.get(indiceJugadorActual);
+        OperacionesJuego operacion = this.gestorEstados.operacionesPermitidas(jugadorActual, estado);
+        
+        switch(operacion){
+            case PASAR_TURNO:
+                this.pasarTurno();
+                this.siguientePasoCompletado(operacion);
+                break;
+            case AVANZAR:
+                this.avanzaJugador();
+                this.siguientePasoCompletado(operacion);
+                break;
+             
+        }
+        
+        return operacion;
     }
    public void siguientePasoCompletado(OperacionesJuego operacion){
        this.estado = this.gestorEstados.siguienteEstado(this.jugadores.get(indiceJugadorActual), estado, operacion);
@@ -136,6 +185,7 @@ public class CivitasJuego {
     }
     
     public Casilla getCasillaActual(){
+        
         return this.tablero.getCasilla(this.jugadores.get(indiceJugadorActual).getNumCasillaActual());
     }
     
@@ -145,6 +195,17 @@ public class CivitasJuego {
     
     public String infoJugadorTexto(){
         return this.jugadores.get(indiceJugadorActual).toString();
+    }
+    
+    public ArrayList<String> getPropiedades_UI(){
+        ArrayList<String> result = new ArrayList();
+        ArrayList<TituloPropiedad>  propiedades =  this.jugadores.get(indiceJugadorActual).getPropiedades();
+        
+        for(TituloPropiedad t : propiedades){
+            result.add(t.getNombre());
+        }
+        
+        return result;
     }
     /*
     public static void main(String[] args) {

@@ -5,6 +5,7 @@ class GestorEstados {
     return (EstadosJuego.INICIO_TURNO);
   }
   
+  
   OperacionesJuego operacionesPermitidas(Jugador jugador, EstadosJuego estado) {
     OperacionesJuego op = null;
 

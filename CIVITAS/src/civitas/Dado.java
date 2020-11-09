@@ -10,7 +10,7 @@ import java.util.Random;
  *
  * @author Usuario
  */
- class Dado {
+ public class Dado {
     static final private Dado instance = new Dado();
     static  final private int SalidaCarcel = 5;
     
@@ -53,7 +53,7 @@ import java.util.Random;
         return random.nextInt(n);
     }
     
-    void setDebug(Boolean d){
+    public void setDebug(Boolean d){
         debug = d;
         
         Diario.getInstance().ocurreEvento("Se ha puesto el modo debug a "+d);
