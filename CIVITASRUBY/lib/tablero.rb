@@ -7,16 +7,18 @@ require_relative "casilla"
 module Civitas
   class Tablero
     def initialize(indice)
-      if indice >= 1
+      if indice > 0
         @num_casilla_carcel = indice
       else
+
          @num_casilla_carcel = 1
       end
       
       @casillas = Array.new
-      @casillas.push(Casilla.new('Salida'))
+      @casillas << Casilla.new_casilla_descanso(@num_casilla_carcel,'Salida')
       @por_salida = 0
       @tiene_juez = false
+      
       
     end
     
@@ -27,22 +29,22 @@ module Civitas
     def get_por_salida
       if @por_salida > 0
         aux = @por_salida
-        por_salida -= 1
+        @por_salida = -1
         return aux
       else
         return @por_salida
       end
     end
     
-    def añade_casilla (casilla)
+    def aniade_casilla (casilla)
       if @casillas.length == @num_casilla_carcel
-        @casillas.push(Casilla.new("carcel"))
+        @casillas.push(Casilla.new_casilla_descanso(@num_casilla_carcel,"carcel"))
       end
       
       @casillas.push(casilla)
       
        if @casillas.length == @num_casilla_carcel
-        @casillas.push(Casilla.new("carcel"))
+         @casillas.push(Casilla.new_casilla_descanso(@num_casilla_carcel,"carcel"))
       end
       
       
@@ -50,7 +52,7 @@ module Civitas
     
     def añade_juez 
       if @tiene_juez == false
-        @casillas.push(Casilla.new("Juez"))
+        @casillas.push(Casilla.new_casilla_juez(@num_casilla_carcel, "Juez"))
         @tiene_juez  = true
       end
     end
@@ -58,6 +60,7 @@ module Civitas
     
     
     def get_casilla (num_casilla)
+      
       if correcto(num_casilla) == true
         return @casillas[num_casilla]
       else
@@ -67,11 +70,11 @@ module Civitas
     
     def nueva_posicion (actual, tirada)
       if correcto() == false
+        puts "FALSO"
         return -1
       else
         suma = actual + tirada
         num_casilla = suma % @casillas.length()
-        
         if suma != num_casilla
           @por_salida += 1
         end
@@ -93,19 +96,21 @@ module Civitas
     def correcto(*args)
       if args.length() == 0
         if (@casillas.length() > @num_casilla_carcel) and @tiene_juez
-        return true
-      else
-        return false
+          return true
+        else
+          puts "AQUI "
+          return false
+        end
+      else   
+
+        if correcto() and (args[0] > 0) or  args[0] == 0
+          return true
+        else 
+          puts "AQUI "
+          return false
+        end
       end
-      else
-        
-      if correcto() and (args[0] > 1)
-        return true
-      else
-        return false
-      end
-      end
-      
+   
     end
     
 

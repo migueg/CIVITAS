@@ -114,7 +114,7 @@ module Civitas
         nueva = @tablero.nueva_posicion(casilla_actual, tirada)
 
         if todos[actual].mover_a_casilla(nueva) == true
-          @tablero.get_casilla(nueva).Casilla::recibe_jugador(actual, todos)
+          @tablero.get_casilla(nueva).recibe_jugador(actual, todos)
         end
       end
     end
@@ -137,7 +137,7 @@ module Civitas
     def aplicar_a_jugador_por_casa_hotel (actual,todos)
       if jugador_correcto(actual,todos)
         informe(actual,todos)
-        todos[actual].modificar_saldo(@valor.to_f * todps[actual].cantidad_casas_hoteles)
+        todos[actual].modificar_saldo(@valor.to_f * todos[actual].cantidad_casas_hoteles)
       end
     end
     
@@ -147,13 +147,17 @@ module Civitas
         tipo = Tipo_sorpresa::PAGARCOBRAR
         nueva = Sorpresa.new_sorpresa_sin_tablero(tipo,@valor * -1,"")
         
+        contador = 0;
         todos.each do |j|
+          
           if ! todos[actual].eql?(j)
-            nueva.aplicar_a_jugador(actual,todos)
+            contador 
+            nueva.aplicar_a_jugador(contador % todos.length(),todos)
           end
+          contador += 1
         end
-        
-        nueva2 = Sorpresa.new_sorpresa_sin_tablero(tipo,@valor * todos.length() - 1,"")
+        puts "Valor " + @valor.to_s 
+        nueva2 = Sorpresa.new_sorpresa_sin_tablero(tipo,@valor * ( todos.length()-1) ,"")
         nueva2.aplicar_a_jugador(actual,todos)
       end
     end

@@ -13,7 +13,7 @@ module Civitas
       @ultima_sorpresa = nil 
       @debug = d
       if(d)
-         Diario.instance.ocurre_evento("se ha puesto el modo debug a "+ d)
+        Diario.instance.ocurre_evento("se ha puesto el  modo debug del mazo a "+ d.to_s)
       end
       
     end
@@ -29,7 +29,9 @@ module Civitas
         if @debug == false
           @usadas = 0
           @barajada = true
-          @sorpresas.shuffle
+
+          @sorpresas = @sorpresas.shuffle
+       
         end
       end
       

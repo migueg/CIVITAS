@@ -3,11 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/juego_texto/controlador.rb</file>
             <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/tablero.rb</file>
             <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/titulo_propiedad.rb</file>
-            <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/tipo_sorpresa.rb</file>
+            <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/mazo_sorpresas.rb</file>
             <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/jugador.rb</file>
+            <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/salidas_carcel.rb</file>
+            <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/gestiones_inmobiliarias.rb</file>
             <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/sorpresa.rb</file>
+            <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/tipo_casilla.rb</file>
+            <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/operaciones_juego.rb</file>
+            <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/civitas_juego.rb</file>
+            <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/gestor_estados.rb</file>
+            <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/dado.rb</file>
+            <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/casilla.rb</file>
+            <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/respuestas.rb</file>
+            <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/juego_texto/vista_textual.rb</file>
+            <file>file:/C:/Users/Usuario/Documents/IngenieriaInformatica/PDOO/GIT/CIVITAS/CIVITASRUBY/lib/operacion_inmobiliaria.rb</file>
         </group>
     </open-files>
 </project-private>

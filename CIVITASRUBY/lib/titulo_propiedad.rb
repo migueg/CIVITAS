@@ -25,7 +25,7 @@ module Civitas
     end
     
     def get_importe_hipoteca
-      
+      return (@hipoteca_base.to_f * (1.0 + (@num_casas *0.5) + (@num_hoteles *2.5))).to_f
     end
     
     def get_precio_alquiler
@@ -59,7 +59,16 @@ module Civitas
     end
     
     def cancelar_hipoteca (jugador)
+      result = false
+      if @hipotecado
+        if es_este_el_propietario(jugador)
+          @propietario.paga(self.get_importe_cancelar_hipoteca())
+          @hipotecado = false
+          result = true
+        end
+      end
       
+      result
     end
     
     def cantidad_casas_hoteles
@@ -67,15 +76,40 @@ module Civitas
     end
     
     def comprar (jugador)
-      
+      result = false
+      if tiene_propietario() == false
+        
+        @propietario = jugador
+        result = true
+        @propietario.paga(@precio_compra)
+      end
+      result
     end
     
-    def constuir_casa (jugador)
+    def construir_casa (jugador)
+      resul = false
+  
+      if es_este_el_propietario(jugador) == true
+     
+        @propietario.paga(@precio_edificar)
+        @num_casas += 1
+        result = true
+      end
+      
+      result     
       
     end
     
     def construir_hotel (jugador)
+      result = false
       
+      if es_este_el_propietario(jugador) == true
+        @propietario.paga(@precio_edificar)
+        @num_hoteles += 1
+        result = true
+      end
+      
+      result
     end
     
     def derruir_casa (n,jugador)
@@ -102,12 +136,18 @@ module Civitas
     end
     
     def hipotecar (jugador)
+      salida = false
       
+      if @hipotecado == false && es_este_el_propietario(jugador) == true
+        @propietario.recibe(get_importe_hipoteca())
+        @hipotecado = true
+        salida = true
+      end
+      
+      salida
     end
     
-    def hipotecar (jugador)
-      
-    end
+
     
     def tiene_propietario
       
@@ -116,11 +156,10 @@ module Civitas
     
     def tramitar_alquiler (jugador)
      
-      if @propietario != nil && !@propietario.eql?(jugador)
-        if jugador.paga_alquiler(get_precio_alquiler()) == true
-          puts "HOLA"
-          @propietario.recibe(get_precio_alquiler())
-        end
+      if tiene_propietario()== true && es_este_el_propietario(jugador) == false
+        precio = get_precio_alquiler()
+        jugador.paga_alquiler(precio)
+        @propietario.recibe(precio)
       end
     end
     
