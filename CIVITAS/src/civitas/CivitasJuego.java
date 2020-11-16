@@ -18,7 +18,27 @@ public class CivitasJuego {
     private GestorEstados gestorEstados;
     private Tablero tablero;
     private MazoSorpresas mazo;
-    
+   
+    public void pruebaSorpresas(){
+       
+        Diario diario = Diario.getInstance();
+        diario.ocurreEvento("Turno de " + this.getJugadorActual().getNombre());
+        this.avanzaJugador();
+        this.comprar();
+        this.construirCasa(0);
+        this.construirCasa(0);
+        this.construirCasa(0);
+        this.construirCasa(0);
+        this.construirHotel(0);
+        for(int i = 0 ; i < 4; i++){
+            this.avanzaJugador();
+        }
+        
+        while(diario.eventosPendientes()){
+            System.out.println(diario.leerEvento());
+        }
+            
+    }
     public CivitasJuego (ArrayList<String> nombres){
         this.jugadores = new ArrayList();
         nombres.forEach((nombre) -> {
@@ -35,12 +55,23 @@ public class CivitasJuego {
         
     }
     
+    public static void main(String[] args) {
+        // TODO code application logic here
+        // Dado.getInstance().setDebug(Boolean.TRUE);
+        ArrayList<String> nombres  = new ArrayList() ;
+        nombres.add("Vilma");
+        nombres.add("Pedro");
+        
+        CivitasJuego juego = new CivitasJuego(nombres);
+        juego.pruebaSorpresas();
+    }
     private void inicializarMazoSorpresas(Tablero tablero){
         this.mazo = new MazoSorpresas();
+
         this.mazo.alMazo(new Sorpresa(TipoSorpresa.IRCARCEL,tablero));
         this.mazo.alMazo(new Sorpresa(TipoSorpresa.PAGARCOBRAR,tablero,500,"Cobrar"));
         this.mazo.alMazo(new Sorpresa(TipoSorpresa.PAGARCOBRAR,tablero,-500,"Pagar"));
-        this.mazo.alMazo(new Sorpresa(TipoSorpresa.IRCASILLA,tablero,5,"Ir a casilla"));
+        this.mazo.alMazo(new Sorpresa(TipoSorpresa.IRCASILLA,tablero,14,"Ir a casilla"));
         this.mazo.alMazo(new Sorpresa(TipoSorpresa.IRCASILLA,tablero,18,"Ir a casilla"));
         this.mazo.alMazo(new Sorpresa(TipoSorpresa.IRCASILLA,tablero,10,"Ir a casilla")); 
         this.mazo.alMazo(new Sorpresa(TipoSorpresa.PORCASAHOTEL,tablero,200,"Recibe po casa hotel"));
@@ -109,7 +140,7 @@ public class CivitasJuego {
         int posicionNueva = this.tablero.nuevaPosicion(posicionActual, tirada);
         Casilla casilla = this.tablero.getCasilla(posicionNueva);
         this.contabilizarPasosPorSalida(jugadorActual);
-        System.out.println(posicionNueva);
+        
         jugadorActual.moverACasilla(posicionNueva);
         casilla.recibeJugador(this.indiceJugadorActual, jugadores);
         this.contabilizarPasosPorSalida(jugadorActual);

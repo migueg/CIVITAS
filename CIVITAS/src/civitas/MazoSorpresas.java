@@ -7,7 +7,7 @@ package civitas;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
+import java.util.Random;
 /**
  *
  * @author Migue
@@ -32,7 +32,7 @@ public class MazoSorpresas {
         this.init();
         this.debug = d;
         if(d)
-          Diario.getInstance().ocurreEvento("Se ha puesto el modo debug a "+d);
+          Diario.getInstance().ocurreEvento("Se ha puesto el modo debug del mazo a "+d);
     }
     
     MazoSorpresas (){
@@ -53,7 +53,7 @@ public class MazoSorpresas {
             if(!debug){
                 this.usadas = 0;
                 this.barajada = true; 
-                Collections.shuffle(this.sorpresas); // Baraja el mazo
+                Collections.shuffle(this.sorpresas , new Random()); // Baraja el mazo
             }
            
         }

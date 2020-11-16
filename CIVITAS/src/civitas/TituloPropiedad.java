@@ -41,7 +41,7 @@ public class TituloPropiedad {
 
     @Override
     public String toString() {
-        String result = "TituloPropiedad{" + "\nnombre=" + nombre + "\nalquilerBase=" + alquilerBase + ", \nfactorRevalorizacion=" + factorRevalorizacion + ", hipotecaBsase=" + 
+        String result = "\nTituloPropiedad{" + "\nnombre=" + nombre + "\nalquilerBase=" + alquilerBase + ", \nfactorRevalorizacion=" + factorRevalorizacion + ", hipotecaBsase=" + 
                     hipotecaBsase + ", \nhipotecado=" + hipotecado + ", \numCasas=" + numCasas + ", \numHoteles=" + numHoteles 
                     + ", \nprecioCompra=" + precioCompra + ", \nprecioEdificar=" + precioEdificar ;
         

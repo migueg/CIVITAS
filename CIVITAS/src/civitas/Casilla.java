@@ -16,7 +16,7 @@ public class Casilla {
     private static int carcel;
     private TipoCasilla tipo;
     private TituloPropiedad tituloPropiedad;
-    private TipoSorpresa sorpresa;
+    private Sorpresa sorpresa;
     private static MazoSorpresas mazo;
     
      Casilla (String nombre){
@@ -85,7 +85,7 @@ public class Casilla {
     }
     private void recibeJugador_sorpresa(int iactual , ArrayList<Jugador> todos){
         if(this.jugadorCorrecto(iactual, todos)){
-           Sorpresa sorpresa = this.mazo.siguiente();
+           sorpresa = this.mazo.siguiente();
            this.informe(iactual, todos);
            sorpresa.aplicarAJugador(iactual, todos);
         }
@@ -152,7 +152,7 @@ public class Casilla {
 
     @Override
     public String toString() {
-        String result = "Casilla{\n" + "nombre=" + nombre + ", \ntipo=" + tipo ;
+        String result = "\nCasilla{\n" + "nombre=" + nombre + ", \ntipo=" + tipo ;
         if(this.importe != -1.0){
             result += "\nImporte = "+ this.importe;
         }

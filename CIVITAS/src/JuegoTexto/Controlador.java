@@ -34,7 +34,7 @@ public class Controlador {
             this.vista.pausa();
             OperacionesJuego op = this.civitas.siguientePaso();
             
-            System.out.println(op);
+            
             this.vista.mostrarSiguienteOperacion(op);
             
             if(!op.equals(OperacionesJuego.PASAR_TURNO)){
@@ -94,6 +94,7 @@ public class Controlador {
                         }else{
                             this.civitas.salirCarcelTirando();
                         }
+                        this.civitas.siguientePasoCompletado(op);
                         break;
                         
                 }

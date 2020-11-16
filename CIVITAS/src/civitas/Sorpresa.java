@@ -89,14 +89,14 @@ private void aplicarAJugador_porJugador(int actual  ,ArrayList<Jugador> todos) {
         this.informe(actual, todos);
         TipoSorpresa tipo = TipoSorpresa.PAGARCOBRAR;
         Sorpresa nueva = new Sorpresa(tipo,this.valor * -1,"");
-       
+       int contador = 0;
         for(Jugador j : todos){
             if( ! todos.get(actual).equals(j))
-                nueva.aplicarAJugador(actual, todos);
-            
+                nueva.aplicarAJugador(contador % todos.size(), todos);
+         contador++;  
         }
         
-        Sorpresa nueva2 = new Sorpresa(tipo,this.valor * todos.size()-1 , "");
+        Sorpresa nueva2 = new Sorpresa(tipo,this.valor * (todos.size()-1 ), "");
         nueva2.aplicarAJugador(actual, todos);
     }   
     
@@ -180,7 +180,7 @@ public Boolean jugadorCorrecto(int actual  ,ArrayList<Jugador> todos) {
 
     @Override
     public String toString() {
-        return "Sorpresa{" + "texto=" + texto + ", valor=" + valor + ", mazo=" + mazo + ", tablero=" + tablero + ", tipo=" + tipo + '}';
+        return "\nSorpresa{" + "texto=" + texto + ", valor=" + valor +  ", tipo=" + tipo + "}\n";
     }
 
 

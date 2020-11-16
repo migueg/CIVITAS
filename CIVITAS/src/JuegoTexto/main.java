@@ -24,7 +24,7 @@ public class main {
         CivitasJuego juego = new CivitasJuego(nombres);
         
         Controlador controlador = new Controlador(juego,vista);
-        Dado.getInstance().setDebug(Boolean.TRUE);
+       // Dado.getInstance().setDebug(Boolean.TRUE);
         controlador.juega();
         int i = 0;
     }

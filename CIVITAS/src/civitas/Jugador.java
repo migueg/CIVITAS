@@ -277,6 +277,8 @@ public class Jugador implements Comparable <Jugador> {
                  puedoEdificarCasa = this.puedoEdificarCasa(propiedad);
                  if(puedoEdificarCasa)
                      result = propiedad.construirCasa(this);
+                     if (result)
+                        Diario.getInstance().ocurreEvento("El jugador " + this.nombre + " contruye casa en la propiedad " +ip);
              }
          }
          
