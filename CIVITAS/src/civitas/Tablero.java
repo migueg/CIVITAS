@@ -79,7 +79,7 @@ public class Tablero {
     
     void añadeJuez(){
         if(!this.tieneJuez){
-            this.casillas.add(new Casilla("Juez"));
+            this.casillas.add(new Juez(this.numCasillaCarcel, "Juez"));
             this.tieneJuez= true;
             
         }

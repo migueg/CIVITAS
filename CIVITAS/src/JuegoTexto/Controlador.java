@@ -32,6 +32,7 @@ public class Controlador {
         
         while(!this.civitas.finalDelJuego()){
             this.vista.pausa();
+
             OperacionesJuego op = this.civitas.siguientePaso();
             
             

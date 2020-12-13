@@ -69,12 +69,12 @@ public class Jugador implements Comparable <Jugador> {
         }
     }
     
-    private void perderSalvoconducto(){
+    protected void perderSalvoconducto(){
         this.salvoconducto.usada();
         this.salvoconducto = null;
     }
     
-    private Boolean puedoGastar(float precio){
+    protected Boolean puedoGastar(float precio){
         if(this.encarcelado){
             return false;
         }else{

@@ -63,44 +63,66 @@ public class CivitasJuego {
         nombres.add("Pedro");
         
         CivitasJuego juego = new CivitasJuego(nombres);
-        juego.pruebaSorpresas();
+      // juego.pruebaSorpresas();
+       Dado.getInstance().setDebug(Boolean.TRUE);
+       juego.avanzaJugador();
+       System.out.print(juego.getJugadorActual().toString()); 
+       juego.avanzaJugador();
+       System.out.print(juego.getJugadorActual().toString()); 
+       juego.avanzaJugador();
+       System.out.print(juego.getJugadorActual().toString()); 
+       juego.avanzaJugador();
+       System.out.print(juego.getJugadorActual().toString()); 
+       juego.avanzaJugador();
+       System.out.print(juego.getJugadorActual().toString()); 
+       juego.avanzaJugador();
+       System.out.print(juego.getJugadorActual().toString()); 
+       juego.avanzaJugador();
+       System.out.print(juego.getJugadorActual().toString()); 
+       
+       for (int i = 0 ; i < 10 ; i++){
+           juego.avanzaJugador();
+       System.out.print(juego.getJugadorActual().toString()); 
+       }
+       
     }
     private void inicializarMazoSorpresas(Tablero tablero){
         this.mazo = new MazoSorpresas();
 
-        this.mazo.alMazo(new Sorpresa(TipoSorpresa.IRCARCEL,tablero));
-        this.mazo.alMazo(new Sorpresa(TipoSorpresa.PAGARCOBRAR,tablero,500,"Cobrar"));
-        this.mazo.alMazo(new Sorpresa(TipoSorpresa.PAGARCOBRAR,tablero,-500,"Pagar"));
-        this.mazo.alMazo(new Sorpresa(TipoSorpresa.IRCASILLA,tablero,14,"Ir a casilla"));
-        this.mazo.alMazo(new Sorpresa(TipoSorpresa.IRCASILLA,tablero,18,"Ir a casilla"));
-        this.mazo.alMazo(new Sorpresa(TipoSorpresa.IRCASILLA,tablero,10,"Ir a casilla")); 
-        this.mazo.alMazo(new Sorpresa(TipoSorpresa.PORCASAHOTEL,tablero,200,"Recibe po casa hotel"));
-        this.mazo.alMazo(new Sorpresa(TipoSorpresa.PORCASAHOTEL,tablero,-200,"Paga por casa hotel"));
-        this.mazo.alMazo(new Sorpresa(TipoSorpresa.PORJUGADOR,tablero,100,"Recibe por jugador"));
-        this.mazo.alMazo(new Sorpresa(TipoSorpresa.PORJUGADOR,tablero,-100,"Paga por jugador"));
-        this.mazo.alMazo(new Sorpresa(TipoSorpresa.SALIRCARCEL,tablero));
+        this.mazo.alMazo(new ConversionEspeculador(tablero));
+        this.mazo.alMazo(new IrACarcel(tablero));
+        this.mazo.alMazo(new PagarCobrar(tablero,500,"Cobrar"));
+        this.mazo.alMazo(new PagarCobrar(tablero,-500,"Pagar"));
+        this.mazo.alMazo(new IrACasilla(tablero,14,"Ir a casilla"));
+        this.mazo.alMazo(new IrACasilla(tablero,18,"Ir a casilla"));
+        this.mazo.alMazo(new IrACasilla(tablero,10,"Ir a casilla")); 
+        this.mazo.alMazo(new PorCasaHotel(tablero,200,"Recibe po casa hotel"));
+        this.mazo.alMazo(new PorCasaHotel(tablero,-200,"Paga por casa hotel"));
+        this.mazo.alMazo(new PorJugador(tablero,100,"Recibe por jugador"));
+        this.mazo.alMazo(new PorJugador(tablero,-100,"Paga por jugador"));
+        this.mazo.alMazo(new SalirCarcel(tablero));
         this.tablero.updateMazo(mazo);
     }
     private void inicializarTablero(MazoSorpresas mazo){
         this.tablero = new Tablero(10);
-        this.tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle Pedro Antonio Alarcón", 100,(float)0.40,150,150,300) ));
-        this.tablero.añadeCasilla(new Casilla (new TituloPropiedad("Calle Recogidas", 150,(float)0.35,200,200,400)));
-        this.tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle Pavaneras", 200,(float)0.25,250,250,500) ));
-        this.tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle Mesones", 300,(float)0.20,400,400,600) ));
-        this.tablero.añadeCasilla(new Casilla(mazo,"Sorpresa1"));
-        this.tablero.añadeCasilla(new Casilla (new TituloPropiedad("Plaza de la Trinidad", 400,(float)0.1,500,500,650)));
+        this.tablero.añadeCasilla(new Calle(new TituloPropiedad("Calle Pedro Antonio Alarcón", 100,(float)0.40,150,150,300) ));
+        this.tablero.añadeCasilla(new Calle (new TituloPropiedad("Calle Recogidas", 150,(float)0.35,200,200,400)));
+        this.tablero.añadeCasilla(new Calle(new TituloPropiedad("Calle Pavaneras", 200,(float)0.25,250,250,500) ));
+        this.tablero.añadeCasilla(new Calle(new TituloPropiedad("Calle Mesones", 300,(float)0.20,400,400,600) ));
+        this.tablero.añadeCasilla(new CasillaSorpresa(mazo,"Sorpresa1"));
+        this.tablero.añadeCasilla(new Calle (new TituloPropiedad("Plaza de la Trinidad", 400,(float)0.1,500,500,650)));
         this.tablero.añadeJuez();
-        this.tablero.añadeCasilla(new Casilla("Descanso"));
-        this.tablero.añadeCasilla(new Casilla(new TituloPropiedad("Camino de Ronda", 500,(float)1,600,600,750) ));
-        this.tablero.añadeCasilla(new Casilla(mazo,"Sorpresa2"));
-        this.tablero.añadeCasilla(new Casilla(new TituloPropiedad("Plaza Mariana Pineda", 600,(float)1.5,1000,1000,1500) ));
-        this.tablero.añadeCasilla(new Casilla (new TituloPropiedad("Calle San Matias", 900,(float)2,1500,1500,2000)));
-        this.tablero.añadeCasilla(new Casilla(mazo,"Sorpresa3"));
-        this.tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle Recogidas", 1200,(float)2.5,2000,2000,2500)));
-        this.tablero.añadeCasilla(new Casilla((float)500,"Impuesto"));
-        this.tablero.añadeCasilla(new Casilla(new TituloPropiedad("Paseo de Los Tristes", 1500,(float)3,2500,2500,3000) ));
-        this.tablero.añadeCasilla(new Casilla (new TituloPropiedad("Plaza Birrambla", 2500,(float)3,4000,4000,5000)));
-        this.tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle Angel Ganivet", 3000,(float)4,5000,5000,6000) ));
+        this.tablero.añadeCasilla(new Casilla("Parking"));
+        this.tablero.añadeCasilla(new Calle(new TituloPropiedad("Camino de Ronda", 500,(float)1,600,600,750) ));
+        this.tablero.añadeCasilla(new CasillaSorpresa(mazo,"Sorpresa2"));
+        this.tablero.añadeCasilla(new Calle(new TituloPropiedad("Plaza Mariana Pineda", 600,(float)1.5,1000,1000,1500) ));
+        this.tablero.añadeCasilla(new Calle (new TituloPropiedad("Calle San Matias", 900,(float)2,1500,1500,2000)));
+        this.tablero.añadeCasilla(new CasillaSorpresa(mazo,"Sorpresa3"));
+        this.tablero.añadeCasilla(new Calle(new TituloPropiedad("Calle Recogidas", 1200,(float)2.5,2000,2000,2500)));
+        this.tablero.añadeCasilla(new Impuesto((float)500,"Impuesto"));
+        this.tablero.añadeCasilla(new Calle(new TituloPropiedad("Paseo de Los Tristes", 1500,(float)3,2500,2500,3000) ));
+        this.tablero.añadeCasilla(new Calle (new TituloPropiedad("Plaza Birrambla", 2500,(float)3,4000,4000,5000)));
+        this.tablero.añadeCasilla(new Calle(new TituloPropiedad("Calle Angel Ganivet", 3000,(float)4,5000,5000,6000) ));
     }
     
     
