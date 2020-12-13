@@ -8,7 +8,23 @@ module Civitas
   require_relative 'sorpresa'
   require_relative 'tipo_sorpresa'
   require_relative 'dado'
+  require_relative 'Calle'
+  require_relative 'Casilla_sorpresa'
+  require_relative 'Impuesto'
+  require_relative 'Conversion_especulador'
+  require_relative 'Ir_a_carcel'
+  require_relative 'Pagar_cobrar'
+  require_relative 'Por_casa_hotel'
+  require_relative 'Salir_carcel'
+  require_relative 'Ir_a_casilla'
+  require_relative 'Por_jugador'
+
+
+
+
+
   
+
   class Civitas_juego
     attr_accessor :jugadores, :indice_jugador_actual
 #    
@@ -287,16 +303,35 @@ module Civitas
 
 
     def self.main
+      #CAMBIAR DEBUG MAZO
+      #CAMBIAR VISIBILIDAD AVANZAJUGADOR DE ESTA CLASE
+      
       nombres = Array.new()
       nombres << "J1"
       nombres << "J2"
-      nombres << "J3"
-      nombres << "J4"
+      Dado.instance.set_debug(true)
       civitas = Civitas_juego.new(nombres)
-      puts civitas.inspect
+      indice = civitas.indice_jugador_actual
+      jugador = civitas.jugadores[indice]
+      20.times do
+        civitas.avanza_jugador()
+    
+      end
+      civitas.avanza_jugador()
+      civitas.comprar
+      
+      9.times do
+    
+        civitas.construir_casa(0)
+    
+      end
+      diario = Diario.instance
+      while diario.eventos_pendientes do
+        puts diario.leer_evento
+      end
     end
     
-
+   
     
 #    METODOS PRIVADOS
 #    -----------------------------------------------------------------------------------------
@@ -305,47 +340,48 @@ module Civitas
     def inicializar_mazo_sorpresas(tablero)
      
 
-        
-      @mazo.al_mazo(Sorpresa.new_sorpresa_tablero(Tipo_sorpresa::IRACARCEL,tablero))
-      @mazo.al_mazo(Sorpresa.new_sorpresa(Tipo_sorpresa::PAGARCOBRAR,tablero,500,"Cobrar"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa(Tipo_sorpresa::PAGARCOBRAR,tablero,-500,"Pagar"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa(Tipo_sorpresa::IRACASILLA,tablero,14,"Ir a casilla"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa(Tipo_sorpresa::IRACASILLA,tablero,18,"Ir a casilla"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa(Tipo_sorpresa::IRACASILLA,tablero,10,"Ir a casilla"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa(Tipo_sorpresa::PORCASAHOTEL,tablero,200,"Recibe por casa hotel"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa(Tipo_sorpresa::PORCASAHOTEL,tablero,-200,"Paga por casa hotel"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa(Tipo_sorpresa::PORJUGADOR,tablero,100,"Recibe por jugador"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa(Tipo_sorpresa::PORJUGADOR,tablero,-100,"Paga por jugador"))
-      @mazo.al_mazo(Sorpresa.new_sorpresa_tablero(Tipo_sorpresa::SALIRCARCEL, tablero))
+      @mazo.al_mazo(Conversion_especulador.new(tablero))
+      @mazo.al_mazo(Ir_a_carcel.new(tablero, -1, "ir a carcel"))
+      @mazo.al_mazo(Pagar_cobrar.new(tablero,500,"Cobrar"))
+      @mazo.al_mazo(Pagar_cobrar.new(tablero,-500,"Pagar"))
+      @mazo.al_mazo(Ir_a_casilla.new(tablero,14,"Ir a casilla"))
+      @mazo.al_mazo(Ir_a_casilla.new(tablero,18,"Ir a casilla"))
+      @mazo.al_mazo(Ir_a_casilla.new(tablero,10,"Ir a casilla"))
+      @mazo.al_mazo(Por_casa_hotel.new(tablero,200,"Recibe por casa hotel"))
+      @mazo.al_mazo(Por_casa_hotel.new(tablero,-200,"Paga por casa hotel"))
+      @mazo.al_mazo(Por_jugador.new(tablero,100,"Recibe por jugador"))
+      @mazo.al_mazo(Por_jugador.new(tablero,-100,"Paga por jugador"))
+      @mazo.al_mazo(Salir_carcel.new( tablero))
     end
     
     def inicializar_tablero(mazo)
       carcel = 10
       @tablero = Tablero.new(carcel)
-      @tablero.aniade_casilla(Casilla.new_casilla_calle(carcel,Titulo_propiedad.new("Calle Pedro Antonio Alarcon", 100,0.40.to_f,150,150,300)))
-      @tablero.aniade_casilla(Casilla.new_casilla_calle(carcel,Titulo_propiedad.new("Calle Recogidas", 150,0.35.to_f,200,200,400)))
-      @tablero.aniade_casilla(Casilla.new_casilla_calle(carcel,Titulo_propiedad.new("Calle Pavaneras", 200,0.25.to_f,250,250,500)))
-      @tablero.aniade_casilla(Casilla.new_casilla_calle(carcel,Titulo_propiedad.new("Calle Mesones", 300,0.20.to_f,400,400,600)))
-      @tablero.aniade_casilla(Casilla.new_casilla_sorpresa(carcel,mazo, "Sorpresa1"))
-      @tablero.aniade_casilla(Casilla.new_casilla_calle(carcel,Titulo_propiedad.new("Plaza de la Trinidad", 400,0.1.to_f,500,500,650)))
+      @tablero.aniade_casilla(Calle.new(carcel,Titulo_propiedad.new("Calle Pedro Antonio Alarcon", 100,0.40.to_f,150,150,300)))
+      @tablero.aniade_casilla(Calle.new(carcel,Titulo_propiedad.new("Calle Recogidas", 150,0.35.to_f,200,200,400)))
+      @tablero.aniade_casilla(Calle.new(carcel,Titulo_propiedad.new("Calle Pavaneras", 200,0.25.to_f,250,250,500)))
+      @tablero.aniade_casilla(Calle.new(carcel,Titulo_propiedad.new("Calle Mesones", 300,0.20.to_f,400,400,600)))
+      @tablero.aniade_casilla(Casilla_sorpresa.new(carcel,mazo, "Sorpresa1"))
+      @tablero.aniade_casilla(Calle.new(carcel,Titulo_propiedad.new("Plaza de la Trinidad", 400,0.1.to_f,500,500,650)))
       @tablero.añade_juez()
-      @tablero.aniade_casilla(Casilla.new_casilla_descanso(carcel,"Descanso"))
-      @tablero.aniade_casilla(Casilla.new_casilla_calle(carcel,Titulo_propiedad.new("Camino de Ronda", 500,1.to_f,600,600,750)))
-      @tablero.aniade_casilla(Casilla.new_casilla_sorpresa(carcel,mazo, "Sorpresa2"))
-      @tablero.aniade_casilla(Casilla.new_casilla_calle(carcel,Titulo_propiedad.new("Plaza Mariana Pineda", 600,1.5.to_f,1000,1000,1500)))
-      @tablero.aniade_casilla(Casilla.new_casilla_calle(carcel,Titulo_propiedad.new("Calle San Matias", 900,2.to_f,1500,1500,2000)))
-      @tablero.aniade_casilla(Casilla.new_casilla_sorpresa(carcel,mazo, "Sorpresa3"))
-      @tablero.aniade_casilla(Casilla.new_casilla_calle(carcel,Titulo_propiedad.new("Calle Recogidas", 1200,2.5.to_f,2000,2000,2500)))
-      @tablero.aniade_casilla(Casilla.new_casilla_impuesto(carcel,500.to_f, "Impuesto"))
-      @tablero.aniade_casilla(Casilla.new_casilla_calle(carcel,Titulo_propiedad.new("Paseo de Los Tristes", 1500,3.to_f,2500,2500,3000)))
-      @tablero.aniade_casilla(Casilla.new_casilla_calle(carcel,Titulo_propiedad.new("Plaza Birrambla", 2500,3.to_f,4000,4000,5000)))
-      @tablero.aniade_casilla(Casilla.new_casilla_calle(carcel,Titulo_propiedad.new("Calle Angel Ganivet", 3000,4.to_f,5000,5000,6000)))  
+      @tablero.aniade_casilla(Casilla.new("parking",carcel))
+      @tablero.aniade_casilla(Calle.new(carcel,Titulo_propiedad.new("Camino de Ronda", 500,1.to_f,600,600,750)))
+      @tablero.aniade_casilla(Casilla_sorpresa.new(carcel,mazo, "Sorpresa2"))
+      @tablero.aniade_casilla(Calle.new(carcel,Titulo_propiedad.new("Plaza Mariana Pineda", 600,1.5.to_f,1000,1000,1500)))
+      @tablero.aniade_casilla(Calle.new(carcel,Titulo_propiedad.new("Calle San Matias", 900,2.to_f,1500,1500,2000)))
+      @tablero.aniade_casilla(Casilla_sorpresa.new(carcel,mazo, "Sorpresa3"))
+      @tablero.aniade_casilla(Calle.new(carcel,Titulo_propiedad.new("Calle Recogidas", 1200,2.5.to_f,2000,2000,2500)))
+      @tablero.aniade_casilla(Impuesto.new(carcel,500.to_f, "Impuesto"))
+      @tablero.aniade_casilla(Calle.new(carcel,Titulo_propiedad.new("Paseo de Los Tristes", 1500,3.to_f,2500,2500,3000)))
+      @tablero.aniade_casilla(Calle.new(carcel,Titulo_propiedad.new("Plaza Birrambla", 2500,3.to_f,4000,4000,5000)))
+      @tablero.aniade_casilla(Calle.new(carcel,Titulo_propiedad.new("Calle Angel Ganivet", 3000,4.to_f,5000,5000,6000)))  
     end
-      
+    
       def avanza_jugador
         jugador_actual = @jugadores[@indice_jugador_actual]
+   
         posicion_actual = jugador_actual.num_casilla_actual
-
+        
         tirada = Dado.instance.tirar()
         posicion_nueva = @tablero.nueva_posicion(posicion_actual, tirada)
 
@@ -388,5 +424,5 @@ end
 if $0 == __FILE__
   # De esta manera el main de esta clase se llamarÃ¡ cuando se ejecute este archivo explÃ­citamente
   # No se llamarÃ¡ cuando este archivo sea interpretado por ruby debido a que ha sido referenciado desde otro archivo con un require_relative
-  Civitas::Civitas_juego.prueba_hipotecar
+  Civitas::Civitas_juego.main
   end

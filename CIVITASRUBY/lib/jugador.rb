@@ -9,6 +9,7 @@ module Civitas
     require_relative 'dado'
     require_relative 'diario'
     require_relative 'titulo_propiedad'
+    require_relative 'Jugador_especulador'
     attr_reader :nombre, :num_casilla_actual, :encarcelado , :saldo , :puede_comprar ,:propiedades ,:salvoconducto
     
     @@Casas_max = 4
@@ -18,7 +19,7 @@ module Civitas
     @@Precio_por_libertad = 200
     @@Saldo_inicial = 7500
     
-    def initialize (encarcelado, nombre , num_casilla_actual , puede_comprar, saldo, propiedades , salvoconducto)
+    def initialize (encarcelado, nombre , num_casilla_actual , puede_comprar, saldo, propiedades , salvoconducto , fianza = nil)
      @encarcelado = encarcelado
      @nombre = nombre
      @num_casilla_actual = num_casilla_actual
@@ -33,11 +34,22 @@ module Civitas
      
      @salvoconducto = salvoconducto
      
-     
+      if self.instance_of?(Jugador_especulador)
+        self.actualizar_propietario_por_conversion()
+      end
     end
     
    
-    
+    def get_hoteles_max()
+      return @@Hoteles_max
+    end
+    def get_casas_max()
+      return @@Casas_max
+    end
+    def self.nuevo_especulador(jugador)
+      new(jugador.encarcelado,jugador.nombre,jugador.num_casilla_actual,jugador.puede_comprar,jugador.saldo,jugador.propiedades , jugador.salvoconducto)
+    end
+#    
     def self.new_jugador_copia(jugador)
       new(jugador.encarcelado,jugador.nombre,jugador.num_casilla_actual,jugador.puede_comprar,jugador.saldo,jugador.propiedades , jugador.salvoconducto)
     end
@@ -364,9 +376,6 @@ module Civitas
       end
     end
     
-    
-    private
-    
     def perder_salvoconducto()
       @salvoconducto.usada()
       @salvoconducto = nil
@@ -377,6 +386,7 @@ module Civitas
       if @encarcelado == true
         false
       else
+
         if @saldo >= precio
         
           return true
@@ -387,7 +397,19 @@ module Civitas
       end
       
     end
+    def get_propiedades()
+      return @propiedades
+    end
+     def actualizar_propietario_por_conversion()
+      p = get_propiedades()
+      
+      p.each  do |t|
+          t.actualizar_propietario_por_conversion(self)
+      end
+     end
     
+    private
+
     def existe_la_propiedad (ip)
       return @propiedades[ip] != nil
     end
@@ -397,7 +419,7 @@ module Civitas
     end
     
     def puedo_edificar_casa(titulo)
-      if puedo_gastar(titulo.precio_edificar) == true && titulo.num_casas < @@Casas_max
+      if puedo_gastar(titulo.precio_edificar) == true && titulo.num_casas < get_casas_max()
        
         true
       else
@@ -410,7 +432,7 @@ module Civitas
       
       precio = titulo.precio_edificar
       
-      if puedo_gastar(precio) && titulo.num_hoteles < @@Hoteles_max && titulo.num_casas >= @@Casas_Por_Hotel
+      if puedo_gastar(precio) && titulo.num_hoteles < get_hoteles_max && titulo.num_casas >= @@Casas_Por_Hotel
         puedo = true
 
       end

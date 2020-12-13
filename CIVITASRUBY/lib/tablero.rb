@@ -4,6 +4,7 @@
 # and open the template in the editor.
 
 require_relative "casilla"
+require_relative "juez"
 module Civitas
   class Tablero
     def initialize(indice)
@@ -15,7 +16,7 @@ module Civitas
       end
       
       @casillas = Array.new
-      @casillas << Casilla.new_casilla_descanso(@num_casilla_carcel,'Salida')
+      @casillas << Casilla.new('Salida',@num_casilla_carcel)
       @por_salida = 0
       @tiene_juez = false
       
@@ -38,13 +39,13 @@ module Civitas
     
     def aniade_casilla (casilla)
       if @casillas.length == @num_casilla_carcel
-        @casillas.push(Casilla.new_casilla_descanso(@num_casilla_carcel,"carcel"))
+        @casillas.push(Casilla.new(@num_casilla_carcel,"carcel"))
       end
       
       @casillas.push(casilla)
       
        if @casillas.length == @num_casilla_carcel
-         @casillas.push(Casilla.new_casilla_descanso(@num_casilla_carcel,"carcel"))
+         @casillas.push(Casilla.new(@num_casilla_carcel,"carcel"))
       end
       
       
@@ -52,7 +53,7 @@ module Civitas
     
     def añade_juez 
       if @tiene_juez == false
-        @casillas.push(Casilla.new_casilla_juez(@num_casilla_carcel, "Juez"))
+        @casillas.push(Juez.new(@num_casilla_carcel, "Juez"))
         @tiene_juez  = true
       end
     end
