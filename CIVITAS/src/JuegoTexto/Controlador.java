@@ -9,7 +9,7 @@ import civitas.CivitasJuego;
 import civitas.OperacionesJuego;
 import java.util.ArrayList;
 import civitas.Jugador;
-import civitas.Respuestas;
+import GUI.Respuestas;
 import civitas.OperacionInmobiliaria;
 import civitas.GestionesInmobiliarias;
 import civitas.SalidasCarcel;

@@ -6,7 +6,7 @@
 package JuegoTexto;
 import civitas.CivitasJuego;
 import java.util.ArrayList;
-import civitas.Dado;
+
 /**
  *
  * @author Usuario

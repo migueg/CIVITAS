@@ -39,7 +39,7 @@ public class Calle extends Casilla{
     } 
    
    @Override
-   TituloPropiedad getTituloPropiedad() {
+   public TituloPropiedad getTituloPropiedad() {
       
         return this.tituloPropiedad;
         

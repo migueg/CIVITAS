@@ -81,6 +81,14 @@ public class TituloPropiedad {
            return false;
        }
     }
+
+    public float getAlquilerBase() {
+        return alquilerBase;
+    }
+
+    public float getHipotecaBsase() {
+        return hipotecaBsase;
+    }
     
     public Boolean getHipotecado(){
        return this.hipotecado;
@@ -160,24 +168,24 @@ public class TituloPropiedad {
         return cantidadRecibida * factorInteresesHipoteca;
     }
 
-    String getNombre(){
+    public String getNombre(){
        return this.nombre;
     }
-    int getNumCasas(){
+    public int getNumCasas(){
        return this.numCasas;
     }
-    int getNumHoteles(){
+    public int getNumHoteles(){
        return this.numHoteles;
     }
   
-    float getPrecioCompra(){
+    public float getPrecioCompra(){
        return this.precioCompra;
     }
-    float getPrecioEdificar() {
+    public float getPrecioEdificar() {
        return this.precioEdificar;
     }
   
-    Jugador getPropietario() {
+    public Jugador getPropietario() {
        return this.propietario;
     }
     Boolean hipotecar( Jugador jugador ){

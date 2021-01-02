@@ -21,6 +21,10 @@ public class CasillaSorpresa extends Casilla {
         CasillaSorpresa.mazo = mazo;
         
     }
+
+    public Sorpresa getSorpresa() {
+        return sorpresa;
+    }
     
     @Override
     public void updateMazo(MazoSorpresas mazo){

@@ -6,6 +6,7 @@
 package civitas;
 
 import java.util.ArrayList;
+import GUI.Dado;
 
 /**
  *
@@ -50,6 +51,27 @@ public class Jugador implements Comparable <Jugador> {
         
     }
     
+    public TituloPropiedad getTitulo(String nombre){
+        Boolean termino = false;
+        TituloPropiedad titulo = null;
+        for(int i = 0 ; i < this.propiedades.size() && !termino; i++){
+            if(this.propiedades.get(i).getNombre().contains(nombre)){
+                termino = true;
+                titulo = this.propiedades.get(i);
+                  
+            }
+                
+        }
+        
+        return titulo;
+    }
+    
+    public Boolean isEpeculador(){
+        if ( this instanceof JugadorEspeculador)
+            return true;
+        else
+            return false;
+    }
     public int compareTo(Jugador otro){
        
        return Float.compare(this.saldo,  otro.getSaldo());
@@ -113,10 +135,14 @@ public class Jugador implements Comparable <Jugador> {
         }
 
     }
+
+    public Boolean getEncarcelado() {
+        return encarcelado;
+    }
     
     
     
-    protected String getNombre(){
+    public String getNombre(){
         return this.nombre;
     }
     
@@ -372,11 +398,11 @@ public class Jugador implements Comparable <Jugador> {
         return puedeComprar;
     }
 
-    protected float getSaldo() {
+    public float getSaldo() {
         return saldo;
     }
 
-   protected ArrayList<TituloPropiedad> getPropiedades() {
+   public ArrayList<TituloPropiedad> getPropiedades() {
         return propiedades;
     }
     

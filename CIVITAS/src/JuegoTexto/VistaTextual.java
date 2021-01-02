@@ -11,7 +11,7 @@ import civitas.Casilla;
 import civitas.GestionesInmobiliarias;
 import civitas.Jugador;
 import civitas.TituloPropiedad;
-import civitas.Respuestas;
+import GUI.Respuestas;
 
 class VistaTextual {
   
