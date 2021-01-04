@@ -56,6 +56,29 @@ public class CivitasJuego {
         
     }
     
+    public ArrayList<Casilla> getContiguas(){
+        ArrayList<Casilla> array = new ArrayList();
+        
+        int casillaActual = this.getJugadorActual().getNumCasillaActual();
+        
+        int izquierda ;
+        int derecha;
+        
+        if(casillaActual == 0)
+            izquierda= 19;
+        else
+            izquierda = casillaActual-1;
+        
+        if (casillaActual == 19)
+            derecha = 0;
+        else
+            derecha = casillaActual + 1;
+        
+        array.add(this.tablero.getCasilla(izquierda));
+        array.add(this.tablero.getCasilla(derecha));
+        
+        return array;
+    }
     public static void main(String[] args) {
         // TODO code application logic here
         // Dado.getInstance().setDebug(Boolean.TRUE);

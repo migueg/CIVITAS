@@ -13,6 +13,7 @@ import civitas.OperacionesJuego;
 import civitas.SalidasCarcel;
 import civitas.Sorpresa;
 import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.*;
 /**
  *
@@ -61,10 +62,64 @@ public class CivitasView extends javax.swing.JFrame {
     
     public void  setContinuar(Boolean b){this.continuar=false;}
     
+    private void setContiguas(ArrayList<Casilla>array){
+        
+        if (array.get(0) instanceof Calle){
+          
+          
+            this.panelnombre0.setBackground(Color.blue);
+            this.nombre0.setText(array.get(0).getNombre());
+            this.panelizquierda.setBackground(Color.blue);
+            this.izquierda.setText("CALLE");
+
+        }else if ( array.get(0) instanceof CasillaSorpresa){
+       
+            this.panelnombre0.setBackground(Color.green);
+            this.nombre0.setText(array.get(0).getNombre());
+            this.panelizquierda.setBackground(Color.green);
+            this.izquierda.setText("CASILLA SORPRESA");
+           
+          
+        }else if ( array.get(0) instanceof Casilla){
+            this.panelnombre0.setBackground(Color.red);
+            this.nombre0.setText(array.get(0).getNombre());
+            this.panelizquierda.setBackground(Color.red);
+            this.izquierda.setText("CASILLA DESCANSO");
+        }
+        
+        
+         if (array.get(1) instanceof Calle){
+          
+          
+            this.panelnombre2.setBackground(Color.blue);
+            this.nombre2.setText(array.get(1).getNombre());
+            this.panelDerecha.setBackground(Color.blue);
+            this.derecha.setText("CALLE");
+
+        }else if ( array.get(1) instanceof CasillaSorpresa){
+       
+            this.panelnombre2.setBackground(Color.green);
+            this.nombre2.setText(array.get(1).getNombre());
+            this.panelDerecha.setBackground(Color.green);
+            this.derecha.setText("CASILLA SORPRESA");
+           
+          
+        }else if ( array.get(1) instanceof Casilla){
+            this.panelnombre2.setBackground(Color.red);
+            this.nombre2.setText(array.get(1).getNombre());
+            this.panelDerecha.setBackground(Color.red);
+            this.derecha.setText("CASILLA DESCANSO");
+        }
+    }
     void actualizarVista(){
       
         this.jugadorPanel.setJugador(this.juego.getJugadorActual());
+        
+        ArrayList<Casilla> array = this.juego.getContiguas();
+        this.setContiguas(array);
+        
         Casilla casilla = this.juego.getCasillaActual();
+        
         this.calle1.setVisible(false);
         this.paneldescanso1.setVisible(false);
         this.sorpresa.setVisible(false);
@@ -129,6 +184,7 @@ public class CivitasView extends javax.swing.JFrame {
         diarioD.repaint();
         diarioD.revalidate();
     }
+    
     
     Respuestas comprar(){
         int opcion= JOptionPane.showConfirmDialog(null, "¿Quieres comprar la calle actual?",
@@ -198,16 +254,27 @@ public class CivitasView extends javax.swing.JFrame {
         propietario1 = new java.awt.TextField();
         paneldescanso1 = new javax.swing.JPanel();
         descanso1 = new javax.swing.JLabel();
-        contendorVistaJugador = new javax.swing.JPanel();
         titulo = new javax.swing.JLabel();
         casillaActual = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         siguienteOperacion = new javax.swing.JTextField();
         panelRanking = new javax.swing.JPanel();
-        jRanking = new javax.swing.JLabel();
         rankingScrollPanel = new javax.swing.JScrollPane();
         ranking = new javax.swing.JTextArea();
+        jRanking = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        casillaIzquierda = new javax.swing.JPanel();
+        panelnombre0 = new javax.swing.JPanel();
+        nombre0 = new javax.swing.JLabel();
+        panelizquierda = new javax.swing.JPanel();
+        izquierda = new javax.swing.JLabel();
+        contendorVistaJugador = new javax.swing.JPanel();
+        casilladerecha = new javax.swing.JPanel();
+        panelnombre2 = new javax.swing.JPanel();
+        nombre2 = new javax.swing.JLabel();
+        panelDerecha = new javax.swing.JPanel();
+        derecha = new javax.swing.JLabel();
+        botonAyuda = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 153, 153));
@@ -268,6 +335,7 @@ public class CivitasView extends javax.swing.JFrame {
         panelNombre.setMinimumSize(new java.awt.Dimension(250, 98));
         panelNombre.setLayout(new javax.swing.BoxLayout(panelNombre, javax.swing.BoxLayout.LINE_AXIS));
 
+        nombre1.setFont(new java.awt.Font("Felix Titling", 1, 14)); // NOI18N
         nombre1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         nombre1.setText("Nombre");
         nombre1.setToolTipText("");
@@ -424,37 +492,32 @@ public class CivitasView extends javax.swing.JFrame {
             }
         });
 
-        jRanking.setFont(new java.awt.Font("Felix Titling", 1, 12)); // NOI18N
-        jRanking.setText("RANKING");
-        jRanking.setEnabled(false);
-
         ranking.setColumns(20);
         ranking.setRows(5);
         ranking.setEnabled(false);
         rankingScrollPanel.setViewportView(ranking);
 
+        jRanking.setFont(new java.awt.Font("Felix Titling", 1, 12)); // NOI18N
+        jRanking.setText("RANKING");
+        jRanking.setEnabled(false);
+
         javax.swing.GroupLayout panelRankingLayout = new javax.swing.GroupLayout(panelRanking);
         panelRanking.setLayout(panelRankingLayout);
         panelRankingLayout.setHorizontalGroup(
             panelRankingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 409, Short.MAX_VALUE)
-            .addGroup(panelRankingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelRankingLayout.createSequentialGroup()
-                    .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRankingLayout.createSequentialGroup()
+                .addGap(0, 13, Short.MAX_VALUE)
+                .addGroup(panelRankingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jRanking)
-                    .addContainerGap(336, Short.MAX_VALUE))
-                .addComponent(rankingScrollPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE))
+                    .addComponent(rankingScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         panelRankingLayout.setVerticalGroup(
             panelRankingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 129, Short.MAX_VALUE)
-            .addGroup(panelRankingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelRankingLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jRanking)
-                    .addGap(18, 18, 18)
-                    .addComponent(rankingScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(panelRankingLayout.createSequentialGroup()
+                .addComponent(jRanking)
+                .addGap(24, 24, 24)
+                .addComponent(rankingScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         jButton1.setBackground(new java.awt.Color(119, 221, 190));
@@ -465,59 +528,201 @@ public class CivitasView extends javax.swing.JFrame {
             }
         });
 
+        casillaIzquierda.setBackground(new java.awt.Color(204, 255, 204));
+
+        panelnombre0.setBackground(new java.awt.Color(153, 255, 204));
+        panelnombre0.setLayout(new javax.swing.BoxLayout(panelnombre0, javax.swing.BoxLayout.LINE_AXIS));
+
+        nombre0.setFont(new java.awt.Font("Felix Titling", 1, 14)); // NOI18N
+        nombre0.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nombre0.setText("Nombre");
+        nombre0.setToolTipText("");
+        nombre0.setEnabled(false);
+        panelnombre0.add(nombre0);
+
+        panelizquierda.setBackground(new java.awt.Color(255, 153, 153));
+
+        izquierda.setFont(new java.awt.Font("Felix Titling", 1, 14)); // NOI18N
+        izquierda.setText("jLabel2");
+        izquierda.setEnabled(false);
+
+        javax.swing.GroupLayout panelizquierdaLayout = new javax.swing.GroupLayout(panelizquierda);
+        panelizquierda.setLayout(panelizquierdaLayout);
+        panelizquierdaLayout.setHorizontalGroup(
+            panelizquierdaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelizquierdaLayout.createSequentialGroup()
+                .addGap(79, 79, 79)
+                .addComponent(izquierda)
+                .addContainerGap(84, Short.MAX_VALUE))
+        );
+        panelizquierdaLayout.setVerticalGroup(
+            panelizquierdaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelizquierdaLayout.createSequentialGroup()
+                .addGap(68, 68, 68)
+                .addComponent(izquierda)
+                .addContainerGap(111, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout casillaIzquierdaLayout = new javax.swing.GroupLayout(casillaIzquierda);
+        casillaIzquierda.setLayout(casillaIzquierdaLayout);
+        casillaIzquierdaLayout.setHorizontalGroup(
+            casillaIzquierdaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, casillaIzquierdaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(casillaIzquierdaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(panelizquierda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelnombre0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        casillaIzquierdaLayout.setVerticalGroup(
+            casillaIzquierdaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(casillaIzquierdaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelnombre0, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(panelizquierda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        casilladerecha.setBackground(new java.awt.Color(204, 255, 204));
+
+        panelnombre2.setBackground(new java.awt.Color(153, 255, 204));
+        panelnombre2.setLayout(new javax.swing.BoxLayout(panelnombre2, javax.swing.BoxLayout.LINE_AXIS));
+
+        nombre2.setFont(new java.awt.Font("Felix Titling", 1, 14)); // NOI18N
+        nombre2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nombre2.setText("Nombre");
+        nombre2.setToolTipText("");
+        nombre2.setEnabled(false);
+        panelnombre2.add(nombre2);
+
+        panelDerecha.setBackground(new java.awt.Color(255, 153, 153));
+
+        derecha.setFont(new java.awt.Font("Felix Titling", 1, 14)); // NOI18N
+        derecha.setText("jLabel2");
+        derecha.setEnabled(false);
+
+        javax.swing.GroupLayout panelDerechaLayout = new javax.swing.GroupLayout(panelDerecha);
+        panelDerecha.setLayout(panelDerechaLayout);
+        panelDerechaLayout.setHorizontalGroup(
+            panelDerechaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDerechaLayout.createSequentialGroup()
+                .addGap(79, 79, 79)
+                .addComponent(derecha)
+                .addContainerGap(83, Short.MAX_VALUE))
+        );
+        panelDerechaLayout.setVerticalGroup(
+            panelDerechaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDerechaLayout.createSequentialGroup()
+                .addGap(68, 68, 68)
+                .addComponent(derecha)
+                .addContainerGap(119, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout casilladerechaLayout = new javax.swing.GroupLayout(casilladerecha);
+        casilladerecha.setLayout(casilladerechaLayout);
+        casilladerechaLayout.setHorizontalGroup(
+            casilladerechaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(casilladerechaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(casilladerechaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelnombre2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelDerecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        casilladerechaLayout.setVerticalGroup(
+            casilladerechaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(casilladerechaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelnombre2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(panelDerecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(4, 4, 4))
+        );
+
+        botonAyuda.setText("AYUDA");
+        botonAyuda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botonAyudaMouseClicked(evt);
+            }
+        });
+        botonAyuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAyudaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(casillaIzquierda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(60, 60, 60)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(casilla1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(contendorVistaJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 634, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(111, 111, 111))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addComponent(casillaActual))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(casilla1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(63, 63, 63)
+                        .addComponent(casilladerecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(298, 298, 298))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(titulo)
-                                .addGap(100, 100, 100))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(casillaActual)
-                                .addGap(161, 161, 161)))))
+                        .addComponent(contendorVistaJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 884, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 157, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(botonAyuda, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(titulo)
+                        .addGap(132, 132, 132)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(siguienteOperacion))
-                    .addComponent(panelRanking, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(6, 6, 6)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addGap(18, 18, 18)
+                            .addComponent(siguienteOperacion, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(panelRanking, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(siguienteOperacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(titulo))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(contendorVistaJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(casillaActual)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(31, 31, 31)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(siguienteOperacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(titulo)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(botonAyuda, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(panelRanking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(casilla1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(105, 105, 105)
+                        .addComponent(panelRanking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(56, 56, 56)
+                        .addComponent(contendorVistaJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(casillaActual)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(casilla1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(casillaIzquierda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(casilladerecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -536,6 +741,18 @@ public class CivitasView extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.continuar = true;
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void botonAyudaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonAyudaMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_botonAyudaMouseClicked
+
+    private void botonAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAyudaActionPerformed
+        // TODO add your handling code here:
+        AyudaDialog ayudaD= new AyudaDialog(this); //crea la ventana de ayuda
+        ayudaD.repaint();
+        ayudaD.revalidate();
+    }//GEN-LAST:event_botonAyudaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -574,13 +791,18 @@ public class CivitasView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.TextField alquiler1;
+    private javax.swing.JButton botonAyuda;
     private javax.swing.JPanel calle1;
     private javax.swing.JPanel casilla1;
     private javax.swing.JLabel casillaActual;
+    private javax.swing.JPanel casillaIzquierda;
+    private javax.swing.JPanel casilladerecha;
     private java.awt.TextField compra1;
     private javax.swing.JPanel contendorVistaJugador;
+    private javax.swing.JLabel derecha;
     private javax.swing.JLabel descanso1;
     private java.awt.TextField hipoteca1;
+    private javax.swing.JLabel izquierda;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jHipoteca1;
     private javax.swing.JLabel jLabel1;
@@ -590,10 +812,16 @@ public class CivitasView extends javax.swing.JFrame {
     private javax.swing.JLabel jValor;
     private javax.swing.JLabel jalquiler1;
     private javax.swing.JLabel jcompra1;
+    private javax.swing.JLabel nombre0;
     private javax.swing.JLabel nombre1;
+    private javax.swing.JLabel nombre2;
+    private javax.swing.JPanel panelDerecha;
     private javax.swing.JPanel panelNombre;
     private javax.swing.JPanel panelRanking;
     private javax.swing.JPanel paneldescanso1;
+    private javax.swing.JPanel panelizquierda;
+    private javax.swing.JPanel panelnombre0;
+    private javax.swing.JPanel panelnombre2;
     private java.awt.TextField propietario1;
     private javax.swing.JTextArea ranking;
     private javax.swing.JScrollPane rankingScrollPanel;
